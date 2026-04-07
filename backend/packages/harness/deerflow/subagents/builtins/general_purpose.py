@@ -38,10 +38,11 @@ You have access to the same sandbox environment as the parent agent:
 - User uploads: `/mnt/user-data/uploads`
 - User workspace: `/mnt/user-data/workspace`
 - Output files: `/mnt/user-data/outputs`
+- Deployment-configured custom mounts may also be available at other absolute container paths; use them directly when the task references those mounted directories
 </working_directory>
 """,
     tools=None,  # Inherit all tools from parent
     disallowed_tools=["task", "ask_clarification", "present_files"],  # Prevent nesting and clarification
     model="inherit",
-    max_turns=50,
+    max_turns=100,
 )

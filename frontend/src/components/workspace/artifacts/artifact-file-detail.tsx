@@ -83,7 +83,7 @@ export function ArtifactFileDetail({
   const isSupportPreview = useMemo(() => {
     return language === "html" || language === "markdown";
   }, [language]);
-  const { content } = useArtifactContent({
+  const { content, url } = useArtifactContent({
     threadId,
     filepath: filepathFromProps,
     enabled: isCodeFile && !isWriteFile,
@@ -188,13 +188,19 @@ export function ArtifactFileDetail({
               </Tooltip>
             )}
             {!isWriteFile && (
-              <a href={urlOfArtifact({ filepath, threadId })} target="_blank">
-                <ArtifactAction
-                  icon={SquareArrowOutUpRightIcon}
-                  label={t.common.openInNewWindow}
-                  tooltip={t.common.openInNewWindow}
-                />
-              </a>
+              <ArtifactAction
+                icon={SquareArrowOutUpRightIcon}
+                label={t.common.openInNewWindow}
+                tooltip={t.common.openInNewWindow}
+                onClick={() => {
+                  const w = window.open(
+                    urlOfArtifact({ filepath, threadId }),
+                    "_blank",
+                    "noopener,noreferrer",
+                  );
+                  if (w) w.opener = null;
+                }}
+              />
             )}
             {isCodeFile && (
               <ArtifactAction
@@ -214,16 +220,19 @@ export function ArtifactFileDetail({
               />
             )}
             {!isWriteFile && (
-              <a
-                href={urlOfArtifact({ filepath, threadId, download: true })}
-                target="_blank"
-              >
-                <ArtifactAction
-                  icon={DownloadIcon}
-                  label={t.common.download}
-                  tooltip={t.common.download}
-                />
-              </a>
+              <ArtifactAction
+                icon={DownloadIcon}
+                label={t.common.download}
+                tooltip={t.common.download}
+                onClick={() => {
+                  const w = window.open(
+                    urlOfArtifact({ filepath, threadId, download: true }),
+                    "_blank",
+                    "noopener,noreferrer",
+                  );
+                  if (w) w.opener = null;
+                }}
+              />
             )}
             <ArtifactAction
               icon={XIcon}
@@ -240,7 +249,9 @@ export function ArtifactFileDetail({
           (language === "markdown" || language === "html") && (
             <ArtifactFilePreview
               content={displayContent}
+              isWriteFile={isWriteFile}
               language={language ?? "text"}
+              url={url}
             />
           )}
         {isCodeFile && viewMode === "code" && (
@@ -263,10 +274,14 @@ export function ArtifactFileDetail({
 
 export function ArtifactFilePreview({
   content,
+  isWriteFile,
   language,
+  url,
 }: {
   content: string;
+  isWriteFile: boolean;
   language: string;
+  url?: string;
 }) {
   if (language === "markdown") {
     return (
@@ -286,8 +301,8 @@ export function ArtifactFilePreview({
       <iframe
         className="size-full"
         title="Artifact preview"
-        srcDoc={content}
         sandbox="allow-scripts allow-forms"
+        {...(isWriteFile ? { srcDoc: content } : url ? { src: url } : {})}
       />
     );
   }
