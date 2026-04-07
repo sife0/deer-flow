@@ -43,6 +43,7 @@ class AppConfig(BaseModel):
     model_config = ConfigDict(extra="allow", frozen=False)
     checkpointer: CheckpointerConfig | None = Field(default=None, description="Checkpointer configuration")
     stream_bridge: StreamBridgeConfig | None = Field(default=None, description="Stream bridge configuration")
+    bigdata: dict | None = Field(default=None, description="Big Data infrastructure configuration")
 
     @classmethod
     def resolve_config_path(cls, config_path: str | None = None) -> Path:

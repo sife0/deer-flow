@@ -19,12 +19,15 @@ def _build_subagent_section(max_concurrent: int) -> str:
     """
     n = max_concurrent
     bash_available = "bash" in get_available_subagent_names()
+    bigdata_ops_available = "bigdata-ops" in get_available_subagent_names()
     available_subagents = (
         "- **general-purpose**: For ANY non-trivial task - web research, code exploration, file operations, analysis, etc.\n- **bash**: For command execution (git, build, test, deploy operations)"
         if bash_available
         else "- **general-purpose**: For ANY non-trivial task - web research, code exploration, file operations, analysis, etc.\n"
         "- **bash**: Not available in the current sandbox configuration. Use direct file/web tools or switch to AioSandboxProvider for isolated shell access."
     )
+    if bigdata_ops_available:
+        available_subagents += "\n- **bigdata-ops**: Big data infrastructure operations — component deployment (Hadoop, Spark, Kafka, Flink), cluster configuration, scaling, troubleshooting, and architecture consulting"
     direct_tool_examples = "bash, ls, read_file, web_search, etc." if bash_available else "ls, read_file, web_search, etc."
     direct_execution_example = (
         '# User asks: "Run the tests"\n# Thinking: Cannot decompose into parallel sub-tasks\n# → Execute directly\n\nbash("npm test")  # Direct execution, not task()'

@@ -42,6 +42,9 @@ async def task_tool(
     - **bash**: Command execution specialist for running bash commands. This is only
       available when host bash is explicitly allowed or when using an isolated shell
       sandbox such as `AioSandboxProvider`.
+    - **bigdata-ops**: Big data infrastructure operations — component deployment (Hadoop, 
+      Spark, Kafka, Flink), cluster configuration, scaling, troubleshooting, and 
+      architecture consulting.
 
     When to use this tool:
     - Complex tasks requiring multiple steps or tools
